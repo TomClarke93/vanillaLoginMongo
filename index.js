@@ -21,6 +21,19 @@ app.get('/login', (req, res) => {
     res.render('login');
 })
 
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
+    console.log(user);
+    if (user.password === password) {
+        console.log('Logged In')
+        return res.redirect('/users');
+    } else {
+        console.log('Incorrect');
+        res.redirect('/login');
+    }
+})
+
 app.get('/register', (req, res) => {
     res.render('register');
 })
