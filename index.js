@@ -2,6 +2,14 @@ const express = require('express');
 const app = express();
 const ejsMate = require('ejs-mate');
 const path = require('path');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/vanillaLoginMongo', {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Connected to MongoDB');
+});
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -14,8 +22,13 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register');
 })
+
 app.get('/users', (req, res) => {
     res.render('users/index');
+})
+
+app.post('/users', (req, res) => {
+    res.redirect('/login');
 })
 
 app.listen(3000, () => {
